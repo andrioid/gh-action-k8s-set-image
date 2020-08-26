@@ -6,7 +6,10 @@ inputs:
     description: Namespace to run on
   images:
     required: true
-    description: One or more lines to define image changes. E.g. deployment/example=eu.gcr.io/example/base:latest
+    description: One or more lines to define image changes. Format; deployment.<deploymentname>.<containername>=<image>:<tag>. E.g. deployment.awesomesauce.backend=eu.gcr.io/example/base:latest
 runs:
   using: "node12"
   main: "dist/index.js"
+branding:
+  color: green
+  icon: octagon

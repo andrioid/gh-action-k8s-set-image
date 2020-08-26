@@ -9,7 +9,8 @@ async function run(): Promise<void> {
     const images = imageStr.split("\n");
     core.info(`Namespace: '${namespace}'`);
     images.forEach((i) => {
-      core.info(`Image: ${i}`);
+      const [where, to] = i.split("=");
+      core.info(`kubectl --namespace ${namespace} ${where} --set-image ${to}`);
     });
   } catch (error) {
     core.setFailed(error.message);
