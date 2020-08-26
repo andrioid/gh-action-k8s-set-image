@@ -43,7 +43,11 @@ function run() {
         try {
             const namespace = core.getInput("namespace");
             const imageStr = core.getInput("images");
-            core.info(`Namespace: '${namespace}' imageStr: '${imageStr}'`);
+            const images = imageStr.split("\n");
+            core.info(`Namespace: '${namespace}'`);
+            images.forEach((i) => {
+                core.info(`Image: ${i}`);
+            });
         }
         catch (error) {
             core.setFailed(error.message);
