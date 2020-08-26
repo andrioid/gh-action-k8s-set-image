@@ -17,5 +17,4 @@ jobs:
             deployment.example.backend=eu.gcr.io/example/awesome:latest
             deployment.example.frontend=eu.gcr.io/example/awesome:latest
             deployment.sidecart.sidecart=eu.gcr.io/example/awesome:latest
-          asset: ./dist
       - run: ls -alh
