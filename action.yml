@@ -1,0 +1,12 @@
+name: "Kubernetes: Set Image"
+description: "Update your deployments in a jiffy. Requires a working kubectl."
+inputs:
+  namespace:
+    required: true
+    description: Namespace to run on
+  images:
+    required: true
+    description: One or more lines to define image changes. E.g. deployment/example=eu.gcr.io/example/base:latest
+runs:
+  using: "node12"
+  main: "dist/index.js"

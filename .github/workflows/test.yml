@@ -1,0 +1,21 @@
+on: [push]
+
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-latest
+    name: Testing
+    steps:
+      # To use this repository's private action,
+      # you must check out the repository
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Test our action
+        uses: ./ # Uses an action in the root directory
+        with:
+          namespace: "default"
+          images: |
+            deployment.example.backend=eu.gcr.io/example/awesome:latest
+            deployment.example.frontend=eu.gcr.io/example/awesome:latest
+            deployment.sidecart.sidecart=eu.gcr.io/example/awesome:latest
+          asset: ./dist
+      - run: ls -alh
