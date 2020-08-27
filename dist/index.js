@@ -45,9 +45,12 @@ function run() {
         try {
             const namespace = core.getInput("namespace");
             const imageStr = core.getInput("images");
-            const lines = imageLinesToKubelines(imageStr, namespace);
+            const dryRun = core.getInput("dry-run") === "true";
+            const wait = core.getInput("wait") === "true";
+            const lines = imageLinesToKubelines(imageStr, namespace, wait);
+            const cmd = dryRun ? "echo kubectl" : "kubectl";
             for (let i = 0; i < lines.length; i++) {
-                exec.exec(lines[i]);
+                exec.exec(`${cmd} ${lines[i]}`);
             }
         }
         catch (error) {
@@ -55,7 +58,7 @@ function run() {
         }
     });
 }
-function imageLinesToKubelines(imageStr, namespace) {
+function imageLinesToKubelines(imageStr, namespace, wait) {
     const images = imageStr.split("\n");
     const kubeout = [];
     const deployments = {};
@@ -88,6 +91,7 @@ function imageLinesToKubelines(imageStr, namespace) {
             });
         }
     }
+    // Start by setting images
     for (let dep in deployments) {
         const resources = deployments[dep].resources;
         let resourceStr = "";
@@ -98,7 +102,12 @@ function imageLinesToKubelines(imageStr, namespace) {
                 resourceStr += " ";
             }
         }
-        kubeout.push(`kubectl --namespace ${namespace} set image deployment/${dep} ${resourceStr}`);
+        kubeout.push(`--namespace ${namespace} set image deployment/${dep} ${resourceStr}`);
+    }
+    if (wait) {
+        for (let dep in deployments) {
+            kubeout.push(`kubectl --namespace ${namespace} rollout status deployment/${dep}`);
+        }
     }
     return kubeout;
 }

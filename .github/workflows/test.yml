@@ -9,10 +9,10 @@ jobs:
       # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v2
-      - run: alias kubectl=echo
       - name: Test our action
         uses: ./ # Uses an action in the root directory
         with:
+          dry-run: "true"
           namespace: "default"
           images: |
             deployment.example.backend=eu.gcr.io/example/awesome:latest
@@ -26,9 +26,9 @@ jobs:
       # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v2
-      - run: alias kubectl=echo
       - name: Test our action
         uses: ./ # Uses an action in the root directory
         with:
+          dry-run: "true"
           namespace: "default"
           images: deployment.example.backend=eu.gcr.io/example/awesome:latest

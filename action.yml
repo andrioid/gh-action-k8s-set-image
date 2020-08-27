@@ -11,6 +11,10 @@ inputs:
     description: Should we wait for the updates to take effect?
     required: false
     default: "true"
+  dry-run:
+    required: false
+    default: "false"
+    description: Will echo commands instead of executing them
 runs:
   using: "node12"
   main: "dist/index.js"

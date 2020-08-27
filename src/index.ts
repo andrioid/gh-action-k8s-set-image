@@ -6,9 +6,13 @@ async function run(): Promise<void> {
   try {
     const namespace: string = core.getInput("namespace");
     const imageStr: string = core.getInput("images");
-    const lines = imageLinesToKubelines(imageStr, namespace);
+    const dryRun: boolean = core.getInput("dry-run") === "true";
+    const wait: boolean = core.getInput("wait") === "true";
+
+    const lines = imageLinesToKubelines(imageStr, namespace, wait);
+    const cmd = dryRun ? "echo kubectl" : "kubectl";
     for (let i = 0; i < lines.length; i++) {
-      exec.exec(lines[i]);
+      exec.exec(`${cmd} ${lines[i]}`);
     }
   } catch (error) {
     core.setFailed(error.message);
@@ -29,7 +33,8 @@ type DeploymentMap = {
 
 export function imageLinesToKubelines(
   imageStr: string,
-  namespace: string
+  namespace: string,
+  wait: boolean
 ): string[] {
   const images = imageStr.split("\n");
   const kubeout: string[] = [];
@@ -65,6 +70,7 @@ export function imageLinesToKubelines(
     }
   }
 
+  // Start by setting images
   for (let dep in deployments) {
     const resources = deployments[dep].resources;
     let resourceStr = "";
@@ -77,10 +83,17 @@ export function imageLinesToKubelines(
     }
 
     kubeout.push(
-      `kubectl --namespace ${namespace} set image deployment/${dep} ${resourceStr}`
+      `--namespace ${namespace} set image deployment/${dep} ${resourceStr}`
     );
   }
 
+  if (wait) {
+    for (let dep in deployments) {
+      kubeout.push(
+        `kubectl --namespace ${namespace} rollout status deployment/${dep}`
+      );
+    }
+  }
   return kubeout;
 }
 
