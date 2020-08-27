@@ -8,6 +8,7 @@ async function run(): Promise<void> {
     const imageStr: string = core.getInput("images");
     const dryRun: boolean = core.getInput("dry-run") === "true";
     const wait: boolean = core.getInput("wait") === "true";
+    core.info(`[k8s set-image] wait=${wait} dry-run=${dryRun}`);
 
     const lines = imageLinesToKubelines(imageStr, namespace, wait);
     const cmd = dryRun ? "echo kubectl" : "kubectl";
@@ -89,9 +90,7 @@ export function imageLinesToKubelines(
 
   if (wait) {
     for (let dep in deployments) {
-      kubeout.push(
-        `kubectl --namespace ${namespace} rollout status deployment/${dep}`
-      );
+      kubeout.push(`--namespace ${namespace} rollout status deployment/${dep}`);
     }
   }
   return kubeout;
