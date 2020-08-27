@@ -9,7 +9,7 @@ jobs:
       # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v2
-      - run: alias kubectl echo
+      - run: alias kubectl=echo
       - name: Test our action
         uses: ./ # Uses an action in the root directory
         with:
@@ -26,7 +26,7 @@ jobs:
       # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v2
-      - run: alias kubectl echo
+      - run: alias kubectl=echo
       - name: Test our action
         uses: ./ # Uses an action in the root directory
         with:
