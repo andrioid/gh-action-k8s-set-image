@@ -9,6 +9,7 @@ jobs:
       # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v2
+      - run: alias kubectl echo
       - name: Test our action
         uses: ./ # Uses an action in the root directory
         with:
@@ -17,7 +18,6 @@ jobs:
             deployment.example.backend=eu.gcr.io/example/awesome:latest
             deployment.example.frontend=eu.gcr.io/example/awesome:latest
             deployment.sidecart.sidecart=eu.gcr.io/example/awesome:latest
-      - run: ls -alh
   single-image:
     runs-on: ubuntu-latest
     name: Testing
@@ -26,10 +26,9 @@ jobs:
       # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v2
+      - run: alias kubectl echo
       - name: Test our action
         uses: ./ # Uses an action in the root directory
         with:
           namespace: "default"
-          images: |
-            deployment.example.backend=eu.gcr.io/example/awesome:latest
-      - run: ls -alh
+          images: deployment.example.backend=eu.gcr.io/example/awesome:latest

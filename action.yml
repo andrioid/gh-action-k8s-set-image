@@ -7,6 +7,10 @@ inputs:
   images:
     required: true
     description: One or more lines to define image changes. Format; deployment.<deploymentname>.<containername>=<image>:<tag>. E.g. deployment.awesomesauce.backend=eu.gcr.io/example/base:latest
+  wait:
+    description: Should we wait for the updates to take effect?
+    required: false
+    default: "true"
 runs:
   using: "node12"
   main: "dist/index.js"
