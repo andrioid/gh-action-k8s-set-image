@@ -51,7 +51,7 @@ function run() {
             const lines = imageLinesToKubelines(imageStr, namespace, wait);
             const cmd = dryRun ? "echo kubectl" : "kubectl";
             for (let i = 0; i < lines.length; i++) {
-                exec.exec(`${cmd} ${lines[i]}`);
+                yield exec.exec(`${cmd} ${lines[i]}`);
             }
         }
         catch (error) {

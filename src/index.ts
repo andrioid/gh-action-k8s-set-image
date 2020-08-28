@@ -13,7 +13,7 @@ async function run(): Promise<void> {
     const lines = imageLinesToKubelines(imageStr, namespace, wait);
     const cmd = dryRun ? "echo kubectl" : "kubectl";
     for (let i = 0; i < lines.length; i++) {
-      exec.exec(`${cmd} ${lines[i]}`);
+      await exec.exec(`${cmd} ${lines[i]}`);
     }
   } catch (error) {
     core.setFailed(error.message);
